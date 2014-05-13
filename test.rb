@@ -1,24 +1,24 @@
 require 'minitest/autorun'
 require './crawler.rb'
+require './wiki.rb'
 
-class CrawlerTest < Minitest::Test
+class WikiTest <Minitest::Test
 
-include WikiCrawl
-
-
-  #def setup
-    #@figs = Crawler.new('Figs')
-    #@flower = Crawler.new('Flower')
-  #end
-
-  def test_title_is_correct
-    assert_equal "Ficus", Crawler.wiki_title("Figs")
-    assert_equal "Flower", Crawler.wiki_title("Flower")
+  def setup
+    @figs = Wiki.new('/wiki/figs')
+    @sf = Wiki.new('/wiki/San_Fransico')
   end
 
-  def test_gets_first_link
-    assert_match /wiki\/Blossom/, Crawler.first_link("Flower")
-    assert_match /wiki\/Genus/, Crawler.first_link("Figs")
-  end 
+  def test_titles_correct
+    assert_equal "Ficus", @figs.title 
+    assert_equal "San Francisco", @sf.title
+  end
+
+  def test_gets_links
+    assert_includes @sf.linked_wikis, '/wiki/Northern_California'
+    assert_includes @figs.linked_wikis, '/wiki/Genus'
+    assert @figs.linked_wikis.inject(true) { |m,a| m && (a.match /\/wiki\//) }
+    assert @sf.linked_wikis.inject(true) { |m,a| m && (a.match /\/wiki\//) }
+  end
 
 end
