@@ -1,53 +1,24 @@
 require 'nokogiri'
 require 'open-uri'
+require './wiki.rb'
 
+module Crawler
 
-module WikiCrawl
-  class Crawler
-
-    def self.wiki_document(ext)
-      url = "http://en.wikipedia.org#{ext}"
-      Nokogiri::HTML(open(url))
+  # takes a Wiki object and returns a path to Philosophy, or a loop, as an Array
+  def path_to_philosophy(wiki, visited = [], verbose = true)
+    return "path_to_philosopy must be passed a Wiki object" unless wiki.Wiki?
+    if wiki.ext == "/wiki/Philosophy"
+      puts "Philosophy Found!" if verbose
+      visited.push(wiki.ext)
+    elsif visited.include?(wiki.ext)
+      puts "Loop Found. Returned to #{wiki.title} (#{wiki.ext})" if verbose
+      visited.push(wiki.ext)
+    else 
+      puts "Crawling...currently on #{wiki.title} (#{wiki.ext})" if verbose  
+      path_to_philosophy(Wiki.new(wiki.non_language_wikis.first),
+                         visited.push(wiki.ext),
+                         verbose)
     end
-
-    def self.wiki_title(ext)
-      doc = wiki_document(ext)
-      title = doc.css('#firstHeading') 
-      if title.xpath('//h1/span/i').empty?
-        title.xpath('//h1/span').text
-      else
-        title.xpath('//h1/span/i').text
-      end
-    end
-
-    def self.first_link(ext)
-      doc = wiki_document(ext)
-      links = doc.css('#mw-content-text').xpath('//p/a')
-      hrefs = links.map { |a| a.attribute('href').to_s }
-      hrefs.select { |a| valid_wiki_link?(a) }.first
-    end
-
-    def self.valid_wiki_link?(link_text)
-      link_text.match(/\/wiki\/[a-zA-Z0-9_]+/)
-    end
-
-    def self.full_wiki_link(link)
-      "http://en.wikipedia.org#{link}"
-    end
-
-    def self.path_to_philosophy(page, visited = [])
-      if wiki_title(page) == "Philosophy"
-        path = visited.join(" =>\n")
-        "Philsophy Reached! Path:\n#{path}"
-      elsif visited.include?(page)
-        "Loop found! Returned to #{wiki_title(page)}"
-      else
-        puts "Currently at: #{wiki_title(page)}, going to #{first_link(page)}"
-        path_to_philosophy(first_link(page), visited + [page])
-      end
-    end
-
-
   end
 end
 
