@@ -22,7 +22,7 @@ class Wiki
   end
 
   def linked_wikis
-    get_links
+    link_text(get_link_nodes)
   end
 
   private 
@@ -30,7 +30,7 @@ class Wiki
     def get_validated_links
       linked_wikis.select do |w|
         !(BLACKLIST.include?(w) || 
-          w.match(/\/wiki\/[a-zA-Z_]+_language/))
+        w.match(/\/wiki\/[a-zA-Z_]+_language/))
       end
     end
     # grabs the title from a wiki page
@@ -39,10 +39,13 @@ class Wiki
     end
 
     # gets all links as array of strings like ['/wiki/example', ...]
-    def get_links
-      @doc.css('#mw-content-text').xpath('//div/p/a').map do |a|
-        a.attribute('href').to_s 
-      end.select { |a| valid_wiki_link?(a) }
+    def get_link_nodes
+      links = @doc.css('#mw-content-text').xpath('//div/p/a')
+      if links.empty?
+        @doc.css('#mw-content-text').xpath('//div/ul/li/a')
+      else
+        links
+      end
     end
 
     def get_doc
@@ -51,8 +54,13 @@ class Wiki
 
     # used to strip out sidebar and internal links, etc
     def valid_wiki_link?(ext)
-      match_text = ext.match(/\/wiki\/[a-zA-Z0-9()_,]+/)
+      match_text = ext.match(/\/wiki\/[a-zA-Z0-9()_,-]+/)
       match_text.is_a?(MatchData) && match_text.to_s == ext
     end
 
+    def link_text(link_nodes)
+      link_nodes.map do |a|
+        a.attribute('href').to_s 
+      end.select { |a| valid_wiki_link?(a) }
+    end
 end
