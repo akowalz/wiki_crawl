@@ -3,7 +3,7 @@
 
 The beginnings of a a web crawler for Wikipedia, written because I was interested in programming the "clicks to philosophy" algorithm and ended up fleshing it out more than that.
 
-Included is very barebones class for Wikipedia articles that will spwan `Wiki` objects when called with the extension link.
+Included is very barebones API for Wikipedia, parsing the webpages into an object that can be worked with.
 
     irb > w = Wiki.new("/wiki/Tortilla")
       => #<Wiki:0x007f87098f1ac8 @ext="/wiki/Tortilla", @uri="http://en.wikipedia.org/wiki/Tortilla", ...>
@@ -16,7 +16,7 @@ Check out `wiki.rb` for full spec on `Wiki` objects.
 
 #### Crawling
 
-The original idea behind this library was making something that could crawl wikipedia articles, clicking the first link on a page and running until it found the page for Philosophy.  It's a cool trick works most of the time.  The wrinkle I had mixed results overcoming is that the link is supposed to be non-parenthesized, which ended up being somewhat tough for my HTML parser to handle. The workaround for now (where most of the mishaps seemed to be happening) was exlcuding any links to Language pages, as an article will often stary, for example: *"Science (from the Latin ...)"*, and we end up clicking Latin. So I have a sort of blacklist of language links I'll keep expanding until I find a better way to deal with this.
+The original idea behind this library was making something that could crawl wikipedia articles, clicking the first link on a page and running until it found the page for Philosophy.  It's a cool trick works most of the time.  The wrinkle is that the link is supposed to be non-parenthesized, which ended up being somewhat tough for my HTML parser to handle. The workaround for now is exlcuding links on blacklist I'm keeping.  Mostly it has language wikis, as an article will often stary, for example: *"Science (from the Latin ...)"*.  And we don't want to click Latin because it ends up down a rabbit hole of links and articles.
 
 Anyway, here's an example of how the crawler works, the algorithm is very simple.The function takes a `Wiki` object and returns an array of wiki extensions as strings.
 
