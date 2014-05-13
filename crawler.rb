@@ -6,7 +6,7 @@ module Crawler
 
   # takes a Wiki object and returns a path to Philosophy, or a loop, as an Array
   def path_to_philosophy(wiki, visited = [], verbose = true)
-    return "path_to_philosopy must be passed a Wiki object" unless wiki.class == Wiki
+    wiki = Wiki.new(wiki) unless wiki.is_a?(Wiki)  
     if wiki.ext == "/wiki/Philosophy"
       puts "Philosophy Found in #{visited.length} clicks!" if verbose
       visited.push(wiki.ext)

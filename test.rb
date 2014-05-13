@@ -44,6 +44,9 @@ class CrawlerTest < Minitest::Test
                   "/wiki/Logic",
                   "/wiki/Philosophy"],
                   path_to_philosophy(Wiki.new('/wiki/Proof_(truth)'), [], false)
+    assert_equal ["/wiki/Logic", "/wiki/Philosophy"], 
+                  path_to_philosophy('/wiki/Logic', [], false)              
+
   end
 
 end
