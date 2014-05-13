@@ -20,6 +20,10 @@ module Crawler
                          verbose)
     end
   end
+
+  def random_philosophy_crawl
+    path_to_philosophy(Wiki.new('/wiki/Special:Random'))
+  end
 end
 
 
