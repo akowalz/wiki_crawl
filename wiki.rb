@@ -4,7 +4,7 @@ require './blacklist.rb'
 
 class Wiki
 
-  attr_reader :title, :uri, :linked_wikis, :ext
+  attr_reader :title, :uri, :ext
 
   # initialize using a /wiki/ extension like /wiki/Priates
 
@@ -30,7 +30,7 @@ class Wiki
     def get_validated_links
       linked_wikis.select do |w|
         !(BLACKLIST.include?(w) || 
-          w.match(/\/wiki\/[a-zA-Z]+_language/))
+          w.match(/\/wiki\/[a-zA-Z_]+_language/))
       end
     end
     # grabs the title from a wiki page
@@ -51,7 +51,7 @@ class Wiki
 
     # used to strip out sidebar and internal links, etc
     def valid_wiki_link?(ext)
-      match_text = ext.match(/\/wiki\/[a-zA-Z0-9()_]+/)
+      match_text = ext.match(/\/wiki\/[a-zA-Z0-9()_,]+/)
       match_text.is_a?(MatchData) && match_text.to_s == ext
     end
 

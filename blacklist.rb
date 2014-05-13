@@ -3,5 +3,6 @@ BLACKLIST =
     'Latin_language',
     'Ancient_Greek',
     'Latin',
-    'American English'
+    'American English',
+    'Alemannic_German'
   ].map { |a| "/wiki/#{a}"}

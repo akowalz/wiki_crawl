@@ -55,3 +55,5 @@ I also used the Wikipedia's Special:Random page to make a function that will get
     Crawling...currently on Logic (/wiki/Logic)
     Philosophy Found!
      => ["/wiki/Special:Random", "/wiki/United_Kingdom", "/wiki/Europe", "/wiki/Continent", "/wiki/Landmass", "/wiki/Earth", "/wiki/World", "/wiki/Human", "/wiki/Hominini", "/wiki/Tribe_(biology)", "/wiki/Biology", "/wiki/Natural_science", "/wiki/Science", "/wiki/Knowledge", "/wiki/Fact", "/wiki/Proof_(truth)", "/wiki/Necessity_and_sufficiency", "/wiki/Logic", "/wiki/Philosophy"]
+
+Its sort of mesmerizing to watch...
