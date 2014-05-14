@@ -4,6 +4,7 @@ require './blacklist.rb'
 
 class Wiki
 
+  VALID_WIKI_REGEX = /\/wiki\/[a-zA-Z0-9()_,-]+/
   attr_reader :title, :uri, :ext
 
   # initialize using a /wiki/ extension like /wiki/Priates
@@ -23,6 +24,10 @@ class Wiki
 
   def linked_wikis
     link_text(get_link_nodes)
+  end
+
+  def first_non_parened_link
+    (linked_wikis - parened_links(first_p_text)).first
   end
 
   private 
@@ -54,7 +59,7 @@ class Wiki
 
     # used to strip out sidebar and internal links, etc
     def valid_wiki_link?(ext)
-      match_text = ext.match(/\/wiki\/[a-zA-Z0-9()_,-]+/)
+      match_text = ext.match(VALID_WIKI_REGEX)
       match_text.is_a?(MatchData) && match_text.to_s == ext
     end
 
@@ -63,4 +68,13 @@ class Wiki
         a.attribute('href').to_s 
       end.select { |a| valid_wiki_link?(a) }
     end
+
+    def first_p_text
+      @doc.css("#mw-content-text").xpath('//div/p').first.to_s
+    end
+
+    def parened_links(text)
+      text.match(/\(([^)]+)\)/).to_s.scan(VALID_WIKI_REGEX)
+    end
+
 end

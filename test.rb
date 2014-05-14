@@ -33,6 +33,11 @@ class WikiTest <Minitest::Test
     assert_equal '/wiki/Knowledge', @sci.non_blacklisted_wikis.first
   end
 
+  def test_non_paren_links
+    assert_equal '/wiki/Indo-European_languages',
+                 Wiki.new('/wiki/Greek_language').first_non_parened_link
+  end
+
 end
 
 class CrawlerTest < Minitest::Test
