@@ -31,13 +31,7 @@ class Wiki
   end
 
   private 
-
-    def get_validated_links
-      linked_wikis.select do |w|
-        !(BLACKLIST.include?(w) || 
-        w.match(/\/wiki\/[a-zA-Z_]+_language/))
-      end
-    end
+  
     # grabs the title from a wiki page
     def get_title
       @doc.css('#firstHeading').xpath('//h1/span').text

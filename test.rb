@@ -10,6 +10,7 @@ class WikiTest <Minitest::Test
     @pm = Wiki.new('/wiki/Polymath')
     @com = Wiki.new('/wiki/Communes_of_France')
     @clop = Wiki.new('/wiki/Clopton_(name)')
+    @glang = Wiki.new('/wiki/Greek_language')
   end
 
   def test_titles_correct
@@ -29,13 +30,9 @@ class WikiTest <Minitest::Test
     assert_equal '/wiki/Administrative_divisions', @com.linked_wikis.first
   end
 
-  def test_first_non_language_link
-    assert_equal '/wiki/Knowledge', @sci.non_blacklisted_wikis.first
-  end
-
-  def test_non_paren_links
+  def test_non_parend_links
     assert_equal '/wiki/Indo-European_languages',
-                 Wiki.new('/wiki/Greek_language').first_non_parened_link
+                 @glang.first_non_parened_link
   end
 
 end
@@ -54,4 +51,8 @@ class CrawlerTest < Minitest::Test
 
   end
 
+  def test_ruby_includes_language
+  assert_includes path_to_philosophy('/wiki/Ruby_(programming_language)',[],false),
+                  "/wiki/Dynamic_programming_language"
+  end
 end
