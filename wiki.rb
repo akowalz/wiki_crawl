@@ -1,6 +1,5 @@
 require 'nokogiri'
 require 'open-uri'
-require './blacklist.rb'
 
 class Wiki
 
@@ -31,7 +30,7 @@ class Wiki
   end
 
   private 
-  
+
     # grabs the title from a wiki page
     def get_title
       @doc.css('#firstHeading').xpath('//h1/span').text
