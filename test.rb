@@ -11,6 +11,7 @@ class WikiTest <Minitest::Test
     @com = Wiki.new('/wiki/Communes_of_France')
     @clop = Wiki.new('/wiki/Clopton_(name)')
     @glang = Wiki.new('/wiki/Greek_language')
+    @khaz = Wiki.new('/wiki/Government_of_Kazakhstan')
   end
 
   def test_titles_correct
@@ -21,7 +22,6 @@ class WikiTest <Minitest::Test
   def test_gets_links
     assert_includes @pm.linked_wikis, '/wiki/Theology'
     assert_includes @clop.linked_wikis, '/wiki/David_Clopton'
-    assert @figs.linked_wikis.inject(true) { |m,a| m && (a.match /\/wiki\//) }
   end
 
   def test_first_link
@@ -30,9 +30,11 @@ class WikiTest <Minitest::Test
     assert_equal '/wiki/Administrative_divisions', @com.linked_wikis.first
   end
 
-  def test_non_parend_links
+  def test_non_parened_links
     assert_equal '/wiki/Indo-European_languages',
                  @glang.first_non_parened_link
+    assert_equal '/wiki/Presidential_system',
+                 @khaz.first_non_parened_link
   end
 
 end
