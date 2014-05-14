@@ -63,7 +63,7 @@ class Wiki
     end
 
     def first_p_text
-      @doc.css("#mw-content-text").xpath('//div/p').first.to_s
+      @doc.css("#mw-content-text > p").first.to_s
     end
 
     def parened_links(text)
