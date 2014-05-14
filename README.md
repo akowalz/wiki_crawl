@@ -16,9 +16,9 @@ Check out `wiki.rb` for full spec on `Wiki` objects.
 
 #### Crawling
 
-The original idea behind this library was making something that could crawl wikipedia articles, clicking the first link on a page and running until it found the page for Philosophy.  It's a cool trick works most of the time.  The wrinkle is that the link is supposed to be non-parenthesized, which ended up being somewhat tough for my HTML parser to handle. The workaround for now is exlcuding links on blacklist I'm keeping.  Mostly it has language wikis, as an article will often start, for example: *"Science (from the Latin ...)"*. The language articles tend to get stuck in loops very easily, so I went ahead and had the algrorithm ignore all links ending with `_language`.  It's a bit of a hack, but it's been giving good results as far as getting to Philosophy is concerned.
+The motivation behind the API was a to make a crawler that could go through Wikipedia pages, the first non-parenthesized linked Wikipedia page, and continuing recursively until it finds '/wiki/Philosophy', which happens a remarkable portion of the time.  
 
-Anyway, here's an example of how the crawler works, the algorithm is very simple.The function takes a `Wiki` object and returns an array of wiki extensions as strings.  If you don't pass a wiki object, it'll do the conversion for you.
+Here's an example of how the crawler works, the algorithm is very simple. The function takes a `Wiki` object and returns an array of wiki extensions as strings (the path).  If you don't pass a wiki object, it'll do the conversion for you.
 
     irb > include Crawler
      => Object 
@@ -32,7 +32,7 @@ Anyway, here's an example of how the crawler works, the algorithm is very simple
     Philosophy Found!
      => ["/wiki/Science", "/wiki/Knowledge", "/wiki/Fact", "/wiki/Proof_(truth)", "/wiki/Necessity_and_sufficiency", "/wiki/Logic", "/wiki/Philosophy"] 
 
-I also used the Wikipedia's Special:Random page to make a function that will get a random page and try to get to philosophy.  
+I also used the Wikipedia's Special:Random page to create `random_philosophy_crawl`, which will try it on some random page.  Here's an example of when I tried it.
 
     irb > random_philosophy_crawl
     Crawling...currently on Henry Perry (boxer) (/wiki/Special:Random)
