@@ -20,13 +20,11 @@ The motivation behind the API was a to make a crawler that could go through Wiki
 
 The algorithm is basically as follows:
 
-* Are we on 'Philosophy'?
-    => We're done! Return the list of pages visited so far
+* **Are we on 'Philosophy'?** We're done! Return the list of pages visited so far.
 
-* Have we been here before?
-    => We're stuck in a loop! Return the list of pages visisted so far
+* **Have we been here before?** We're stuck in a loop! Return the list of pages visisted so far.
 
-* Otherwise, keep crawling!  Recur on the first link on this page, adding the current page to list of pages visited so far.
+* **Otherwise, keep crawling!** Recur on the first link on this page, adding the current page to list of pages visited so far.
 
 Here's an example of the algorithm in action, it manipules the aforementioned `Wiki` objects.
 
@@ -52,6 +50,6 @@ Here's an example of the algorithm in action, it manipules the aforementioned `W
         Philosophy Found in 16 clicks!
          => ["/wiki/Ministry_of_Environment_and_Forests_(India)", "/wiki/Government_of_India", "/wiki/Constitution_of_India", "/wiki/India", "/wiki/South_Asia", "/wiki/South", "/wiki/Noun", "/wiki/Part_of_speech", "/wiki/Grammar", "/wiki/Linguistics", "/wiki/Science", "/wiki/Knowledge", "/wiki/Fact", "/wiki/Proof_(truth)", "/wiki/Necessity_and_sufficiency", "/wiki/Logic", "/wiki/Philosophy"] 
 
-`random_philosophy_crawl` takes advantage of Wikipedia's '/wiki/Special:Random' page to fetch a random page to crawl from, very mesmerizing
+`random_philosophy_crawl` takes advantage of Wikipedia's '/wiki/Special:Random' page to fetch a random page to crawl from (it's somewhat mesmerizing to watch).
 
 `path_to_philosophy` does the same thing, but takes a `Wiki` object (or an extension used to create one) so you can crawl from somewhere specific.
