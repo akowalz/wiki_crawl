@@ -4,7 +4,9 @@ require 'open-uri'
 class Wiki
 
   attr_reader :title, :uri, :ext
+
   VALID_WIKI_REGEX = /\/wiki\/[a-zA-Z0-9()_,-]+/
+  VALID_WIKI_REGEX_WHOLE_STRING = /\A\/wiki\/[a-zA-Z0-9()_,-]+\Z/
 
   # initialize using a /wiki/ extension like /wiki/Priates
   def initialize(ext)
@@ -58,8 +60,7 @@ class Wiki
 
     # used to strip out links to help pages, etc.
     def valid_wiki_link?(ext)
-      match_text = ext.match(VALID_WIKI_REGEX)
-      match_text.is_a?(MatchData) && match_text.to_s == ext
+      ext =~ Regexp.new(VALID_WIKI_REGEX_WHOLE_STRING)
     end
 
     def link_text(link_nodes)
