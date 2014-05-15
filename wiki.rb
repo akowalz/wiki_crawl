@@ -3,22 +3,15 @@ require 'open-uri'
 
 class Wiki
 
-  VALID_WIKI_REGEX = /\/wiki\/[a-zA-Z0-9()_,-]+/
   attr_reader :title, :uri, :ext
+  VALID_WIKI_REGEX = /\/wiki\/[a-zA-Z0-9()_,-]+/
 
   # initialize using a /wiki/ extension like /wiki/Priates
-
   def initialize(ext)
-    @ext = ext
-    @uri = "http://en.wikipedia.org#{ext}"
+    @uri = get_uri(ext)
+    @ext = get_extension
     @doc ||= get_doc
     @title = get_title
-  end
-
-  # ignores all wikis on the blacklist and language wikis
-  # tends to help with the parenthesis issues
-  def non_blacklisted_wikis
-    get_validated_links
   end
 
   def linked_wikis
@@ -29,14 +22,12 @@ class Wiki
     (linked_wikis - parened_links(first_p_text)).first
   end
 
-  private 
+  private
 
-    # grabs the title from a wiki page
     def get_title
       @doc.css('#firstHeading').xpath('//h1/span').text
     end
 
-    # gets all links as array of strings like ['/wiki/example', ...]
     def get_link_nodes
       links = @doc.css('#mw-content-text').xpath('//div/p/a')
       if links.empty?
@@ -46,11 +37,26 @@ class Wiki
       end
     end
 
+    def get_uri(ext)
+      full_uri = "http://en.wikipedia.org#{ext}"
+      if valid_wiki_link?(ext)
+        full_uri
+      else
+        open(full_uri) do |response|
+          response.base_uri.to_s
+        end
+      end
+    end
+
+    def get_extension
+      @uri.scan(VALID_WIKI_REGEX).first
+    end
+
     def get_doc
       Nokogiri::HTML(open(@uri))
     end
 
-    # used to strip out sidebar and internal links, etc
+    # used to strip out links to help pages, etc.
     def valid_wiki_link?(ext)
       match_text = ext.match(VALID_WIKI_REGEX)
       match_text.is_a?(MatchData) && match_text.to_s == ext
