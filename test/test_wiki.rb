@@ -12,7 +12,7 @@ class WikiTest <Minitest::Test
     @glang = Wiki.new('/wiki/Greek_language')
     @khaz = Wiki.new('/wiki/Government_of_Kazakhstan')
   end
-
+=begin
   def test_titles_correct
     assert_equal "Ficus", @figs.title 
     assert_equal "Polymath", @pm.title
@@ -61,5 +61,15 @@ class WikiTest <Minitest::Test
     assert_equal '/wiki/David_Clopton', @clop.first_non_parened_link 
     assert_equal '/wiki/Administrative_divisions', @com.first_non_parened_link 
   end
-
+=end
+  def test_gets_images
+    assert_includes @figs.image_urls,
+    'http://en.wikipedia.org/wiki/File:Sycomoros_old.jpg'
+    assert_includes @figs.image_urls, 
+    'http://en.wikipedia.org/wiki/File:Ficus-AerialRoot.jpg'
+    assert_includes @pm.image_urls,
+    'http://en.wikipedia.org/wiki/File:Leonardo_da_Vinci_-_presumed_self-portrait_-_WGA12798.jpg'
+    assert_includes @sci.image_urls,
+    'http://en.wikipedia.org/wiki/File:The_Scientific_Universe.png'
+  end
 end

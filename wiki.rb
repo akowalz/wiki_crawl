@@ -3,7 +3,7 @@ require 'open-uri'
 
 class Wiki
 
-  attr_reader :title, :uri, :ext
+  attr_reader :title, :uri, :ext, :doc
 
   VALID_WIKI_REGEX = /\/wiki\/[a-zA-Z0-9()_,-]+/
   VALID_WIKI_REGEX_WHOLE_STRING = /\A\/wiki\/[a-zA-Z0-9()_,-]+\Z/
@@ -16,26 +16,29 @@ class Wiki
     @title = get_title
   end
 
-  def inspect
-    '#<Wiki Object ' + self.object_id.to_s +  ', page: ' + @ext + '>'
-  end
 
   def linked_wikis
     link_text(get_link_nodes)
+  end
+
+  def image_urls
+    get_image_urls
   end
 
   def first_non_parened_link
     (linked_wikis - parened_links(first_p_text)).first
   end
 
-
-
+  def inspect
+    '#<Wiki Object ' + self.object_id.to_s +  ', page: ' + @ext + '>'
+  end
 
   private
 
     def get_doc
       Nokogiri::HTML(open(@uri))
     end
+
 
     def content_div
       @doc.css('#mw-content-text')
@@ -69,6 +72,11 @@ class Wiki
       @uri.scan(VALID_WIKI_REGEX).first
     end
 
+    def get_image_urls
+      @doc.css('.image').map do |a|
+        "http://en.wikipedia.org" + a.attribute('href').text.to_s 
+      end
+    end
 
     # used to strip out links to help pages, etc.
     def valid_wiki_link?(ext)
