@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require "../crawler.rb"
+require_relative "../crawler.rb"
 
 class CrawlerTest < Minitest::Test
   include Crawler

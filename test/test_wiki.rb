@@ -1,5 +1,6 @@
 require 'minitest/autorun'
-require "../wiki.rb"
+require_relative "../wiki.rb"
+
 class WikiTest <Minitest::Test
 
   def setup
