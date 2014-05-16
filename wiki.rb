@@ -16,6 +16,10 @@ class Wiki
     @title = get_title
   end
 
+  def inspect
+    '#<Wiki Object ' + self.object_id.to_s +  ', page: ' + @ext + '>'
+  end
+
   def linked_wikis
     link_text(get_link_nodes)
   end
@@ -24,16 +28,27 @@ class Wiki
     (linked_wikis - parened_links(first_p_text)).first
   end
 
+
+
+
   private
+
+    def get_doc
+      Nokogiri::HTML(open(@uri))
+    end
+
+    def content_div
+      @doc.css('#mw-content-text')
+    end
 
     def get_title
       @doc.css('#firstHeading').xpath('//h1/span').text
     end
 
     def get_link_nodes
-      links = @doc.css('#mw-content-text').xpath('//div/p/a')
+      links = content_div.xpath('//div/p/a')
       if links.empty?
-        @doc.css('#mw-content-text').xpath('//div/ul/li/a')
+        content_div.xpath('//div/ul/li/a')
       else
         links
       end
@@ -54,9 +69,6 @@ class Wiki
       @uri.scan(VALID_WIKI_REGEX).first
     end
 
-    def get_doc
-      Nokogiri::HTML(open(@uri))
-    end
 
     # used to strip out links to help pages, etc.
     def valid_wiki_link?(ext)
